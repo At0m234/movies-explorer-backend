@@ -3,7 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const ConflictError = require('../errors/conflict-err');
 
-const saltRounds = 10;
+const { SALTROUNDS } = process.env;
 
 const userSchema = mongoose.Schema({
   // почта пользователя, по которой он регистрируется.
@@ -72,7 +72,7 @@ userSchema.statics.createUserByCredentials = function createUser(
         return Promise.reject(new ConflictError('Пользователь с таким email уже зарегистрирован!'));
       }
       // хешируем пароль
-      return bcrypt.hash(password, saltRounds)
+      return bcrypt.hash(password, SALTROUNDS)
         .then((hash) => {
           if (!hash) {
             return Promise.reject(new Error('Ошибка хеширования!'));

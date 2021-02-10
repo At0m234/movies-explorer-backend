@@ -21,8 +21,7 @@ const users = require('./routes/users');
 // импортируем роутер карточек фильмов
 const movies = require('./routes/movies');
 // Слушаем 3000 порт
-const { PORT = 3000 } = process.env;
-const { MOV_EXP_DB = 'mongodb://localhost:27017/moviesExplorerDB' } = process.env;
+const { PORT, MOV_EXP_DB } = process.env;
 
 const app = express();
 
