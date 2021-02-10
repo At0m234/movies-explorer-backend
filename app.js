@@ -91,7 +91,9 @@ app.use(errorLogger);
 app.use(errors());
 
 // здесь обрабатываем все ошибки
-app.use(CentralizedErrorHandler);
+app.use(() => {
+  CentralizedErrorHandler();
+});
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
