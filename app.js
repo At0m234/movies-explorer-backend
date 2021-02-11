@@ -15,7 +15,6 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { login, createUser } = require('./controllers/users');
 // импортируем класс ошибки
 const NotFoundError = require('./errors/not-found-err');
-const CentralizedErrorHandler = require('./middlewares/centralized-error-handler');
 // импортируем роутер пользователей
 const users = require('./routes/users');
 // импортируем роутер карточек фильмов
@@ -91,8 +90,16 @@ app.use(errorLogger);
 app.use(errors());
 
 // здесь обрабатываем все ошибки
-app.use(() => {
-  CentralizedErrorHandler();
+app.use((err, req, res, next) => {
+  res
+    .status(err.statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: err.statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : err.message,
+    });
+  next();
 });
 
 app.listen(PORT, () => {
