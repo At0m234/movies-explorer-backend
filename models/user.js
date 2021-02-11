@@ -3,8 +3,6 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const ConflictError = require('../errors/conflict-err');
 
-const { SALTROUNDS } = process.env;
-
 const userSchema = mongoose.Schema({
   // почта пользователя, по которой он регистрируется.
   // Это обязательное поле, уникальное для каждого пользователя.
@@ -64,7 +62,7 @@ userSchema.statics.findUserByCredentials = function findUser(email, password) {
 
 // добавим метод создания пользоваля createUserByCredentials к схеме пользователя
 userSchema.statics.createUserByCredentials = function createUser(
-  email, password, name,
+  email, password, SALTROUNDS, name,
 ) {
   return this.findOne({ email })
     .then((user) => {

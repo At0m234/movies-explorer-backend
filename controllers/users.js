@@ -41,11 +41,12 @@ module.exports.getMe = (req, res, next) => {
 // контроллер создает пользователя с переданными в теле email, password и name
 // POST /signup
 module.exports.createUser = (req, res, next) => {
+  const SALTROUNDS = 10;
   const {
     email, password, name,
   } = req.body;
 
-  return User.createUserByCredentials(email, password, name)
+  return User.createUserByCredentials(email, password, SALTROUNDS, name)
     // вернём записанные в базу данные
     .then((user) => {
       if (!user) {
