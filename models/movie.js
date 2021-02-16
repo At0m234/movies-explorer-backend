@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { invalidURL, urlRegExp } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   // страна создания фильма. Обязательное поле-строка.
@@ -32,10 +33,9 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        const urlRegExp = /^(https?:\/\/)([\da-z.-]{1,})(\.)([a-z]{2,6})(\/?)([\da-z-.\W]*)/;
         return urlRegExp.test(v);
       },
-      message: (props) => `${props.value} is not a valid URL!`,
+      message: invalidURL,
     },
   },
   // ссылка на трейлер фильма. Обязательное поле-строка. Запишите её URL-адресом.
@@ -44,10 +44,9 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        const urlRegExp = /^(https?:\/\/)([\da-z.-]{1,})(\.)([a-z]{2,6})(\/?)([\da-z-.\W]*)/;
         return urlRegExp.test(v);
       },
-      message: (props) => `${props.value} is not a valid URL!`,
+      message: invalidURL,
     },
   },
   // миниатюрное изображение постера к фильму. Обязательное поле-строка. Запишите её URL-адресом.
@@ -56,11 +55,15 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        const urlRegExp = /^(https?:\/\/)([\da-z.-]{1,})(\.)([a-z]{2,6})(\/?)([\da-z-.\W]*)/;
         return urlRegExp.test(v);
       },
-      message: (props) => `${props.value} is not a valid URL!`,
+      message: invalidURL,
     },
+  },
+  movieId: {
+    type: Number,
+    required: true,
+    unique: true,
   },
   // _id пользователя, который сохранил статью.
   // Нужно задать поведение по умолчанию, чтобы база данных не возвращала это поле.

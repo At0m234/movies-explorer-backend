@@ -2,11 +2,18 @@ const jwt = require('jsonwebtoken');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
+const {
+  searchUsersError,
+  invalidUserId,
+  createUserError,
+  invalidEmailOrPassword,
+} = require('../utils/constants');
+
 const User = require('../models/user');
 
 // контроллер обновляет информацию о пользователе
 // PATCH /users/me
-module.exports.patchUser = (req, res, next) => {
+const patchUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name: req.body.name },
@@ -17,7 +24,7 @@ module.exports.patchUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Произошла ошибка, не удалось найти пользователей');
+        throw new NotFoundError(searchUsersError);
       }
       res.status(200).send({ data: user });
     })
@@ -26,11 +33,11 @@ module.exports.patchUser = (req, res, next) => {
 
 // контроллер возвращает информацию о пользователе (email и имя)
 // GET /users/me
-module.exports.getMe = (req, res, next) => {
+const getMe = (req, res, next) => {
   User.findById(req.user)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Неверный id пользователя');
+        throw new NotFoundError(invalidUserId);
       } else {
         res.status(200).send({ user });
       }
@@ -40,7 +47,7 @@ module.exports.getMe = (req, res, next) => {
 
 // контроллер создает пользователя с переданными в теле email, password и name
 // POST /signup
-module.exports.createUser = (req, res, next) => {
+const createUser = (req, res, next) => {
   const SALTROUNDS = 10;
   const {
     email, password, name,
@@ -50,7 +57,7 @@ module.exports.createUser = (req, res, next) => {
     // вернём записанные в базу данные
     .then((user) => {
       if (!user) {
-        throw new BadRequestError('Произошла ошибка, не удалось создать пользователя');
+        throw new BadRequestError(createUserError);
       }
       res.status(200).send({ data: user });
     })
@@ -60,14 +67,14 @@ module.exports.createUser = (req, res, next) => {
 
 // контроллер входа в систему и передачи JWT токена в LocalStorage браузера
 // POST /signin
-module.exports.login = (req, res, next) => {
+const login = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Неверная почта или пароль');
+        throw new UnauthorizedError(invalidEmailOrPassword);
       }
       // аутентификация успешна! пользователь в переменной user
       // создадим токен
@@ -81,4 +88,11 @@ module.exports.login = (req, res, next) => {
     })
     // возвращаем ошибку аутентификации
     .catch(next);
+};
+
+module.exports = {
+  patchUser,
+  getMe,
+  createUser,
+  login,
 };

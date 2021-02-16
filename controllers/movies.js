@@ -1,13 +1,21 @@
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const NoRightsErr = require('../errors/no-rights-err');
+const ConflictError = require('../errors/conflict-err');
+const {
+  idExistsError,
+  searchFilmError,
+  noRightsError,
+  invalidMovieId,
+} = require('../utils/constants');
+
 const Movie = require('../models/movie');
 
 // создаёт фильм с переданными в теле
 // country, director, duration, year,
 // description, image, trailer, nameRU, nameEN и thumbnail
 // POST /movies
-module.exports.createMovie = (req, res, next) => {
+const createMovie = (req, res, next) => {
   const {
     country,
     director,
@@ -17,6 +25,7 @@ module.exports.createMovie = (req, res, next) => {
     image,
     trailer,
     thumbnail,
+    movieId,
     nameRU,
     nameEN,
   } = req.body;
@@ -31,26 +40,28 @@ module.exports.createMovie = (req, res, next) => {
     thumbnail,
     nameRU,
     nameEN,
+    movieId,
     owner: req.user._id,
   })
     .then((movie) => {
-      if (!movie) {
-        throw new BadRequestError('Произошла ошибка, не удалось создать карточку с фильмом');
+      if (movie) {
+        res.send({ data: movie });
+      } else {
+        throw new ConflictError(idExistsError);
       }
-      res.send({ data: movie });
     })
     .catch((err) => next(err));
 };
 
 // возвращает все сохранённые пользователем фильмы
 // GET /movies
-module.exports.getOwnMovies = (req, res, next) => {
+const getOwnMovies = (req, res, next) => {
   const owner = req.user._id;
 
   Movie.find({ owner })
     .then((movies) => {
       if (!movies) {
-        throw new NotFoundError('Произошла ошибка, не удалось найти фильмы');
+        throw new NotFoundError(searchFilmError);
       }
       res.send({ data: movies });
     })
@@ -59,15 +70,15 @@ module.exports.getOwnMovies = (req, res, next) => {
 
 // удаляет сохранённый фильм по _id
 // DELETE /movies/:movieId
-module.exports.removeMovie = (req, res, next) => {
+const removeMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (movie === null) {
-        throw new NotFoundError('Фильм не найден');
+        throw new NotFoundError(searchFilmError);
       } else if (String(movie.owner[0]) !== String(req.user._id)) {
-        throw new NoRightsErr('У Вас нет прав на удаление фильмов других пользователей');
+        throw new NoRightsErr(noRightsError);
       } else if (String(req.params.movieId) !== String(movie._id)) {
-        throw new BadRequestError('Неверный id фильма');
+        throw new BadRequestError(invalidMovieId);
       }
       movie.remove()
         .then((deleted) => {
@@ -75,4 +86,10 @@ module.exports.removeMovie = (req, res, next) => {
         });
     })
     .catch((err) => next(err));
+};
+
+module.exports = {
+  createMovie,
+  getOwnMovies,
+  removeMovie,
 };

@@ -5,22 +5,22 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
-const limiter = require('./middlewares/limiter');
+const { limiter } = require('./middlewares/limiter');
 
 // импортируем мидлверы
-const auth = require('./middlewares/auth');
+const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // импортируем контроллеры логина и регистрации
 const { login, createUser } = require('./controllers/users');
 // импортируем класс ошибки
 const NotFoundError = require('./errors/not-found-err');
-// импортируем роутер пользователей
-const users = require('./routes/users');
-// импортируем роутер карточек фильмов
-const movies = require('./routes/movies');
+const CentralizedErrorHandler = require('./middlewares/centralized-error-handler');
+const { serverIsFalling, requestedResourceWasNotFound } = require('./utils/constants');
+// импортируем роутеры пользователей и фильмов
+const { usersRoutes, moviesRoutes } = require('./routes/index');
 // Слушаем 3000 порт
-const { PORT, MOV_EXP_DB } = process.env;
+const { PORT = 3000, MOV_EXP_DB = 'mongodb://localhost:27017/moviesExplorerDB' } = process.env;
 
 const app = express();
 
@@ -48,13 +48,6 @@ app.use(requestLogger);
 // подключаем лимитер запросов
 app.use(limiter);
 
-// подключаем краш-тест сервера
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 // подключаем роуты, не требующие авторизации
 // роут регистрации создаёт пользователя
 // с переданными в теле email, password и name
@@ -74,33 +67,28 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
+// подключаем краш-тест сервера
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error(serverIsFalling);
+  }, 0);
+});
+
 // подключаем роуты, требующие авторизации
-// роут карточек фильмов
-app.use('/movies', auth, movies);
-// роут пользователей
-app.use('/users', auth, users);
+app.use('/users', auth, usersRoutes);
+app.use('/movies', auth, moviesRoutes);
 
 // обработчики ошибок
 app.all('*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не найден');
+  throw new NotFoundError(requestedResourceWasNotFound);
 });
+
 // подключаем логгер ошибок
 app.use(errorLogger);
 // обработчик ошибок celebrate
 app.use(errors());
-
 // здесь обрабатываем все ошибки
-app.use((err, req, res, next) => {
-  res
-    .status(err.statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: err.statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : err.message,
-    });
-  next();
-});
+app.use(CentralizedErrorHandler);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

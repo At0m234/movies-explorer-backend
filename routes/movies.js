@@ -3,7 +3,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const { getOwnMovies, createMovie, removeMovie } = require('../controllers/movies');
 
-const urlRegExp = /^(https?:\/\/)([\da-z.-]{1,})(\.)([a-z]{2,6})(\/?)([\da-z-.\W]*)/;
+const { urlRegExp } = require('../utils/constants');
 
 const createMovieSchema = Joi.object({
   country: Joi.string().required(),
@@ -14,6 +14,7 @@ const createMovieSchema = Joi.object({
   image: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
   trailer: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
   thumbnail: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
+  movieId: Joi.number().required(),
   nameRU: Joi.string().required(),
   nameEN: Joi.string().required(),
 });
@@ -34,7 +35,7 @@ router.post('/', celebrate({
 // DELETE /movies/:movieId
 router.delete('/:movieId', celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().alphanum().required(),
+    movieId: Joi.string().hex().required(),
   }),
 }), removeMovie);
 

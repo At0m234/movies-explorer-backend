@@ -1,7 +1,16 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+
 const ConflictError = require('../errors/conflict-err');
+const UnauthorizedError = require('../errors/unauthorized-err');
+const {
+  invalidEmail,
+  invalidEmailOrPassword,
+  userExistsError,
+  hashError,
+  dataRecordingError,
+} = require('../utils/constants');
 
 const userSchema = mongoose.Schema({
   // почта пользователя, по которой он регистрируется.
@@ -13,10 +22,9 @@ const userSchema = mongoose.Schema({
     unique: true,
     validate: {
       validator(v) {
-        // const emailRegExp = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         return validator.isEmail(v);
       },
-      message: 'Почта не соответсвует требуемому формату',
+      message: invalidEmail,
     },
   },
   // хеш пароля.
@@ -47,13 +55,13 @@ userSchema.statics.findUserByCredentials = function findUser(email, password) {
     .then((user) => {
       // не нашёлся — отклоняем промис
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        throw new UnauthorizedError(invalidEmailOrPassword);
       }
       // нашёлся — сравниваем хеши
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            throw new UnauthorizedError(invalidEmailOrPassword);
           }
           return user;
         });
@@ -67,13 +75,13 @@ userSchema.statics.createUserByCredentials = function createUser(
   return this.findOne({ email })
     .then((user) => {
       if (user) {
-        return Promise.reject(new ConflictError('Пользователь с таким email уже зарегистрирован!'));
+        throw new ConflictError(userExistsError);
       }
       // хешируем пароль
       return bcrypt.hash(password, SALTROUNDS)
         .then((hash) => {
           if (!hash) {
-            return Promise.reject(new Error('Ошибка хеширования!'));
+            throw new Error(hashError);
           }
           // создаем юзера в базе
           return this.create({
@@ -81,7 +89,7 @@ userSchema.statics.createUserByCredentials = function createUser(
           })
             .then((you) => {
               if (!you) {
-                return Promise.reject(new Error('Ошибка записи данных!'));
+                throw new Error(dataRecordingError);
               }
               // ищем юзера и возвращаем данные без password
               return this.findOne({ email });
