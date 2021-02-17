@@ -16,7 +16,10 @@ const User = require('../models/user');
 const patchUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
-    { name: req.body.name },
+    {
+      name: req.body.name,
+      email: req.body.email,
+    },
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением

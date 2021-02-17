@@ -20,7 +20,8 @@ const { serverIsFalling, requestedResourceWasNotFound } = require('./utils/const
 // импортируем роутеры пользователей и фильмов
 const { usersRoutes, moviesRoutes } = require('./routes/index');
 // Слушаем 3000 порт
-const { PORT = 3000, MOV_EXP_DB = 'mongodb://localhost:27017/moviesExplorerDB' } = process.env;
+const { PORT = 3000 } = process.env;
+const { MOV_EXP_DB } = process.env;
 
 const app = express();
 
