@@ -5,20 +5,6 @@ const { getOwnMovies, createMovie, removeMovie } = require('../controllers/movie
 
 const { urlRegExp } = require('../utils/constants');
 
-const createMovieSchema = Joi.object({
-  country: Joi.string().required(),
-  director: Joi.string().required(),
-  duration: Joi.number().required(),
-  year: Joi.string().required(),
-  description: Joi.string().required(),
-  image: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
-  trailer: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
-  thumbnail: Joi.string().required().pattern(new RegExp(urlRegExp)).required(),
-  movieId: Joi.number().required(),
-  nameRU: Joi.string().required(),
-  nameEN: Joi.string().required(),
-});
-
 // возвращает все сохранённые пользователем фильмы
 // GET /movies
 router.get('/', getOwnMovies);
@@ -28,7 +14,18 @@ router.get('/', getOwnMovies);
 // description, image, trailer, nameRU, nameEN и thumbnail
 // POST /movies
 router.post('/', celebrate({
-  body: createMovieSchema,
+  body: Joi.object().keys({
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
+    image: Joi.object().required(),
+    trailerLink: Joi.string().required().pattern(new RegExp(urlRegExp)),
+    movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
+  }).unknown(true),
 }), createMovie);
 
 // удаляет сохранённый фильм по _id
@@ -36,7 +33,7 @@ router.post('/', celebrate({
 router.delete('/:movieId', celebrate({
   params: Joi.object().keys({
     movieId: Joi.string().hex().required(),
-  }),
+  }).unknown(true),
 }), removeMovie);
 
 // экспортировали роутер

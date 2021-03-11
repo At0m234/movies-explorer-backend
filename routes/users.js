@@ -7,7 +7,7 @@ const { getMe, patchUser } = require('../controllers/users');
 // GET /users/me
 router.get('/me', celebrate({
   body: Joi.object().keys({
-    Authorization: Joi.string().required(),
+    authorization: Joi.string().required(),
   }),
 }), getMe);
 

@@ -29,7 +29,7 @@ const patchUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(searchUsersError);
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch((err) => next(err));
 };
@@ -62,7 +62,7 @@ const createUser = (req, res, next) => {
       if (!user) {
         throw new BadRequestError(createUserError);
       }
-      res.status(200).send({ data: user });
+      res.status(200).send(user);
     })
     // данные не записались, вернём ошибку
     .catch(next);

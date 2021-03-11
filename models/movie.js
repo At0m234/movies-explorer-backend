@@ -29,14 +29,8 @@ const movieSchema = new mongoose.Schema({
   },
   // ссылка на постер к фильму. Обязательное поле-строка. Запишите её URL-адресом.
   image: {
-    type: String,
+    type: Object,
     required: true,
-    validate: {
-      validator(v) {
-        return urlRegExp.test(v);
-      },
-      message: invalidURL,
-    },
   },
   // ссылка на трейлер фильма. Обязательное поле-строка. Запишите её URL-адресом.
   trailer: {
@@ -49,21 +43,9 @@ const movieSchema = new mongoose.Schema({
       message: invalidURL,
     },
   },
-  // миниатюрное изображение постера к фильму. Обязательное поле-строка. Запишите её URL-адресом.
-  thumbnail: {
-    type: String,
-    required: true,
-    validate: {
-      validator(v) {
-        return urlRegExp.test(v);
-      },
-      message: invalidURL,
-    },
-  },
   movieId: {
     type: Number,
     required: true,
-    unique: true,
   },
   // _id пользователя, который сохранил статью.
   // Нужно задать поведение по умолчанию, чтобы база данных не возвращала это поле.
