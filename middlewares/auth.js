@@ -6,7 +6,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   // достаём авторизационный заголовок
-  const { authorization } = req.headers;
+  const authorization = req.headers.authorization;
   // убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('Bearer ')) {
     throw new UnauthorizedError(loginError);
