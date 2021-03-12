@@ -22,7 +22,7 @@ const patchUser = (req, res, next) => {
     },
     {
       new: true, // обработчик then получит на вход обновлённую запись
-      runValidators: true, // данные будут валидированы перед изменением
+      // runValidators: true, // данные будут валидированы перед изменением
     },
   )
     .then((user) => {

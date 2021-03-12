@@ -8,7 +8,7 @@ const { getMe, patchUser } = require('../controllers/users');
 router.get('/me', celebrate({
   body: Joi.object().keys({
     authorization: Joi.string().required(),
-  }),
+  }).unknown(true),
 }), getMe);
 
 // обновляет информацию о пользователе (email и имя)
@@ -17,7 +17,7 @@ router.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
-  }),
+  }).unknown(true),
 }), patchUser);
 
 // экспортировали роутер
