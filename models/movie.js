@@ -30,7 +30,7 @@ const movieSchema = new mongoose.Schema({
   // ссылка на постер к фильму. Обязательное поле-строка. Запишите её URL-адресом.
   image: {
     type: Object,
-    required: true,
+    required: false,
   },
   // ссылка на трейлер фильма. Обязательное поле-строка. Запишите её URL-адресом.
   trailer: {

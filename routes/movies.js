@@ -20,9 +20,7 @@ router.post('/', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.object().keys({
-      url: Joi.string() || null,
-    }),
+    image: Joi.object(),
     trailerLink: Joi.string().required().pattern(new RegExp(urlRegExp)),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
