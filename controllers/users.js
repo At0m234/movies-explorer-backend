@@ -25,11 +25,11 @@ const patchUser = (req, res, next) => {
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
-    .then((user) => {
-      if (!user) {
+    .then((data) => {
+      if (!data) {
         throw new NotFoundError(searchUsersError);
       }
-      res.status(200).send({ user });
+      res.status(200).send({ data });
     })
     .catch((err) => next(err));
 };
@@ -38,11 +38,11 @@ const patchUser = (req, res, next) => {
 // GET /users/me
 const getMe = (req, res, next) => {
   User.findById(req.user)
-    .then((user) => {
-      if (!user) {
+    .then((data) => {
+      if (!data) {
         throw new NotFoundError(invalidUserId);
       } else {
-        res.status(200).send({ user });
+        res.status(200).send({ data });
       }
     })
     .catch(next);
