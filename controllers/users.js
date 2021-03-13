@@ -62,7 +62,7 @@ const createUser = (req, res, next) => {
       if (!user) {
         throw new BadRequestError(createUserError);
       }
-      res.status(200).send(user);
+      res.status(200).send({ user });
     })
     // данные не записались, вернём ошибку
     .catch(next);
