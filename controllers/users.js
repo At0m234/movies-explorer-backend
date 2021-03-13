@@ -58,11 +58,11 @@ const createUser = (req, res, next) => {
 
   return User.createUserByCredentials(email, password, SALTROUNDS, name)
     // вернём записанные в базу данные
-    .then((user) => {
-      if (!user) {
+    .then((data) => {
+      if (!data) {
         throw new BadRequestError(createUserError);
       }
-      res.status(200).send({ user });
+      res.status(200).send({ data });
     })
     // данные не записались, вернём ошибку
     .catch(next);
