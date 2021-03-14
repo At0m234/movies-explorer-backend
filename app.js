@@ -41,29 +41,29 @@ mongoose.connect(MOV_EXP_DB, {
 });
 
 // подключаем cors
-const whitelist = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'https://api.movexp.students.nomoredomains.icu/',
-  'https://movexp.students.nomoredomains.icu/',
-  'http://api.movexp.students.nomoredomains.icu/',
-  'http://movexp.students.nomoredomains.icu/',
-];
+// const whitelist = [
+//   'http://localhost:3000',
+//   'http://localhost:3001',
+//   'https://api.movexp.students.nomoredomains.icu/',
+//   'https://movexp.students.nomoredomains.icu/',
+//   'http://api.movexp.students.nomoredomains.icu/',
+//   'http://movexp.students.nomoredomains.icu/',
+// ];
 
-const corsOptionsDelegate = (req, callback) => {
-  let corsOptions;
-  if (whitelist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = {
-      credentials: true,
-      origin: true,
-    };
-  } else {
-    corsOptions = { origin: false };
-  }
-  callback(null, corsOptions);
-};
+// const corsOptionsDelegate = (req, callback) => {
+//   let corsOptions;
+//   if (whitelist.indexOf(req.header('Origin')) !== -1) {
+//     corsOptions = {
+//       credentials: true,
+//       origin: true,
+//     };
+//   } else {
+//     corsOptions = { origin: false };
+//   }
+//   callback(null, corsOptions);
+// };
 
-app.use(cors(corsOptionsDelegate));
+app.use(cors());
 
 // подключаем логгер запросов
 app.use(requestLogger);
