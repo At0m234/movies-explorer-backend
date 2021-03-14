@@ -20,7 +20,7 @@ const { serverIsFalling, requestedResourceWasNotFound } = require('./utils/const
 // импортируем роутеры пользователей и фильмов
 const { usersRoutes, moviesRoutes } = require('./routes/index');
 // Слушаем 3000 порт
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 const { MOV_EXP_DB = 'mongodb://localhost:27017/moviesExplorerDB' } = process.env;
 
 const app = express();
@@ -44,10 +44,10 @@ mongoose.connect(MOV_EXP_DB, {
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://api.movies.students.nomoredomains.icu/',
-  'https://movies.students.nomoredomains.icu/',
-  'http://api.movies.students.nomoredomains.icu/',
-  'http://movies.students.nomoredomains.icu/',
+  'https://api.movexp.students.nomoredomains.icu/',
+  'https://movexp.students.nomoredomains.icu/',
+  'http://api.movexp.students.nomoredomains.icu/',
+  'http://movexp.students.nomoredomains.icu/',
 ];
 
 const corsOptionsDelegate = (req, callback) => {

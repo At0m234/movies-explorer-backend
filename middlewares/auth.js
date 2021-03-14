@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
   // const { authorization } = req.headers.authorization;
   // убеждаемся, что он есть или начинается с Bearer
   if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
-    console.log('1')
+    console.log('1');
     throw new UnauthorizedError(loginError);
   }
   // извлечём токен
