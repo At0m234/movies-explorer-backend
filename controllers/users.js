@@ -27,7 +27,10 @@ const patchUser = (req, res, next) => {
   )
     .then((data) => {
       if (!data) {
-        throw new NotFoundError(searchUsersError);
+        return new NotFoundError(searchUsersError);
+      }
+      if ((req.body.email === data.email) && (req.body.name === data.name)) {
+        return new Error('Вы не изменили информацию о пользователе');
       }
       res.status(200).send({ data });
     })
