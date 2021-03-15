@@ -77,10 +77,9 @@ const createUser = (req, res, next) => {
 const login = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
   const { email, password } = req.body;
-  console.log(req.body)
+
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log(user)
       if (!user) {
         throw new UnauthorizedError(invalidEmailOrPassword);
       }
