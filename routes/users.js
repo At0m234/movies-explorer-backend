@@ -13,12 +13,14 @@ router.get('/me', celebrate({
 
 // обновляет информацию о пользователе (email и имя)
 // PATCH /users/me
-router.patch('/me', celebrate({
-  data: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    email: Joi.string().email().required(),
-  }).unknown(true),
-}), patchUser);
+// router.patch('/me', celebrate({
+//   data: Joi.object().keys({
+//     name: Joi.string().required().min(2).max(30),
+//     email: Joi.string().email().required(),
+//   }).unknown(true),
+// }), patchUser);
+
+router.patch('/me', patchUser);
 
 // экспортировали роутер
 module.exports = router;
