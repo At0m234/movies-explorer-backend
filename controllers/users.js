@@ -14,16 +14,18 @@ const User = require('../models/user');
 // контроллер обновляет информацию о пользователе
 // PATCH /users/me
 const patchUser = (req, res, next) => {
+console.log(req.user);
+console.log(req.body);
   User.findByIdAndUpdate(
     req.user._id,
     {
       name: req.body.name,
       email: req.body.email,
     },
-    {
-      new: true, // обработчик then получит на вход обновлённую запись
-      // runValidators: true, // данные будут валидированы перед изменением
-    },
+    // {
+    //   new: true, // обработчик then получит на вход обновлённую запись
+    //   runValidators: true, // данные будут валидированы перед изменением
+    // },
   )
     .then((data) => {
       if (!data) {
