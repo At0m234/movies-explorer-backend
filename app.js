@@ -51,13 +51,35 @@ mongoose.connect(MOV_EXP_DB, {
 //   next();
 // });
 
-app.use(cors({
-  'Access-Control-Allow-Origin': 'https://movexp.students.nomoredomains.icu',
-  'Access-Control-Allow-Methods': 'PUT, PATCH, GET, POST, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Accept, authorization',
-  origin: 'https://movexp.students.nomoredomains.icu',
-  credentials: true,
-}));
+const allowedCors = [
+  'http://api.movexp.students.nomoredomains.icu',
+  'https://api.movexp.students.nomoredomains.icu',
+  'http://movexp.students.nomoredomains.icu',
+  'https://movexp.students.nomoredomains.icu',
+  'http://localhost:3000',
+];
+
+app.use(cors());
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  next();
+});
+
+app.options('*', cors());
+
+// app.use(cors({
+//   'Access-Control-Allow-Origin': 'https://movexp.students.nomoredomains.icu',
+//   'Access-Control-Allow-Methods': 'PUT, PATCH, GET, POST, DELETE, OPTIONS',
+//   'Access-Control-Allow-Headers': 'Content-Type, Accept, authorization',
+//   origin: 'https://movexp.students.nomoredomains.icu',
+//   credentials: true,
+// }));
 
 // подключаем логгер запросов
 app.use(requestLogger);
