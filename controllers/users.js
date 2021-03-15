@@ -33,6 +33,7 @@ const patchUser = (req, res, next) => {
         return new Error('Вы не изменили информацию о пользователе');
       }
       res.status(200).send({ data });
+      return data;
     })
     .catch((err) => next(err));
 };
