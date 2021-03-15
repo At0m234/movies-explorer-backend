@@ -43,9 +43,11 @@ mongoose.connect(MOV_EXP_DB, {
 // подключаем cors
 
 app.all('*', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Origin', 'https://movexp.students.nomoredomains.icu');
+  res.header('Access-Control-Allow-Methods', 'PUT, PATCH, GET, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Accept');
+  res.header('Access-Control-Allow-Headers', 'authorization');
   next();
 });
 
