@@ -52,21 +52,25 @@ app.use(limiter);
 // подключаем роуты, не требующие авторизации
 // роут регистрации создаёт пользователя
 // с переданными в теле email, password и name
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-    name: Joi.string().required().min(2).max(30),
-  }).unknown(true),
-}), createUser);
+// app.post('/signup', celebrate({
+//   body: Joi.object().keys({
+//     email: Joi.string().required().email(),
+//     password: Joi.string().required().min(8),
+//     name: Joi.string().required().min(2).max(30),
+//   }).unknown(true),
+// }), createUser);
+
+app.post('/signup', createUser);
 
 // роут логина проверяет переданные в теле почту и пароль и возвращает JWT
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }),
-}), login);
+// app.post('/signin', celebrate({
+//   body: Joi.object().keys({
+//     email: Joi.string().required().email(),
+//     password: Joi.string().required().min(8),
+//   }),
+// }), login);
+
+app.post('/signin', login);
 
 // подключаем краш-тест сервера
 app.get('/crash-test', () => {
