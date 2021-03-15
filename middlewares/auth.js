@@ -6,13 +6,13 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   // достаём авторизационный заголовок
-  const { authorization } = req.headers.authorization;
+  // const authorization = req.headers.authorization;
   // убеждаемся, что он есть или начинается с Bearer
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
     throw new UnauthorizedError(loginError);
   }
   // извлечём токен
-  const token = authorization.replace('Bearer ', '');
+  const token = req.headers.authorization.replace('Bearer ', '');
   // верифицируем токен
   let payload;
 
