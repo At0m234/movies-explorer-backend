@@ -42,16 +42,19 @@ mongoose.connect(MOV_EXP_DB, {
 
 // подключаем cors
 
-app.all('*', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://movexp.students.nomoredomains.icu');
-  res.header('Access-Control-Allow-Methods', 'PUT, PATCH, GET, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Headers', 'Accept');
-  res.header('Access-Control-Allow-Headers', 'authorization');
-  next();
-});
+// app.all('*', (req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', 'https://movexp.students.nomoredomains.icu');
+//   res.header('Access-Control-Allow-Methods', 'PUT, PATCH, GET, POST, DELETE, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type');
+//   res.header('Access-Control-Allow-Headers', 'Accept');
+//   res.header('Access-Control-Allow-Headers', 'authorization');
+//   next();
+// });
 
 app.use(cors({
+  'Access-Control-Allow-Origin': 'https://movexp.students.nomoredomains.icu',
+  'Access-Control-Allow-Methods': 'PUT, PATCH, GET, POST, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Accept, authorization',
   origin: 'https://movexp.students.nomoredomains.icu',
   credentials: true,
 }));
