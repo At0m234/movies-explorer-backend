@@ -42,10 +42,10 @@ mongoose.connect(MOV_EXP_DB, {
 
 // подключаем cors
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://api.movexp.students.nomoredomains.icu',
   credentials: true,
 }));
-
+// http://localhost:3000
 // подключаем логгер запросов
 app.use(requestLogger);
 
