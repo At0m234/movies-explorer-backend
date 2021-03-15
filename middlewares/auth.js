@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorized-err');
 const { loginError } = require('../utils/constants');
+const NotFoundError = require('../errors/not-found-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -9,7 +10,7 @@ const auth = (req, res, next) => {
   // const authorization = req.headers.authorization;
   // убеждаемся, что он есть или начинается с Bearer
   if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
-    throw new UnauthorizedError(loginError);
+    throw new NotFoundError("YEAR NONE");
   }
   // извлечём токен
   const token = req.headers.authorization.replace('Bearer ', '');
