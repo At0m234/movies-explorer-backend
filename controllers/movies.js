@@ -23,7 +23,6 @@ const createMovie = (req, res, next) => {
     country, director, duration, year, description,
     image, trailerLink, movieId, nameRU, nameEN,
   } = req.body;
-  console.log(req.body);
   Movie.create({
     country,
     director,
