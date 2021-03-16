@@ -2,7 +2,6 @@ const { serverError } = require('../utils/constants');
 
 // централизованный обработчик ошибок
 const CentralizedErrorHandler = (err, req, res, next) => {
-  console.log(err);
   const { statusCode, message } = err;
 
   res

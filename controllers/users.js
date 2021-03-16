@@ -14,8 +14,6 @@ const User = require('../models/user');
 // контроллер обновляет информацию о пользователе
 // PATCH /users/me
 const patchUser = (req, res, next) => {
-  console.log(req.user);
-  console.log(req.body);
   User.findByIdAndUpdate(
     req.user._id,
     {
