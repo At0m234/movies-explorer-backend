@@ -14,8 +14,8 @@ const User = require('../models/user');
 // контроллер обновляет информацию о пользователе
 // PATCH /users/me
 const patchUser = (req, res, next) => {
-console.log(req.user);
-console.log(req.body);
+  console.log(req.user);
+  console.log(req.body);
   User.findByIdAndUpdate(
     req.user._id,
     {
@@ -23,18 +23,20 @@ console.log(req.body);
       email: req.body.email,
     },
     {
-      new: true, // обработчик then получит на вход обновлённую запись
+    // new: true, // обработчик then получит на вход обновлённую запись
     //   runValidators: true, // данные будут валидированы перед изменением
     },
   )
     .then((data) => {
       if (!data) {
-        return new NotFoundError(searchUsersError);
+        throw new NotFoundError(searchUsersError);
       }
       if ((req.body.email === data.email) && (req.body.name === data.name)) {
-        return new Error('Вы не изменили информацию о пользователе');
+        throw new Error('Вы не изменили информацию о пользователе');
+      } else {
+        res.status(200).send({ name: req.body.name, email: req.body.email });
+        return null;
       }
-      res.status(200).send({ data });
     })
     .catch((err) => next(err));
 };
