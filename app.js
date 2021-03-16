@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const helmet = require('helmet');
-// const cors = require('cors');
+// const helmet = require('helmet');
+const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const { limiter } = require('./middlewares/limiter');
 
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 // разрешаем прием веб-страниц внутри POST-запроса
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(helmet());
+// app.use(helmet());
 
 // подключаемся к серверу mongo
 mongoose.connect(MOV_EXP_DB, {
@@ -59,7 +59,7 @@ mongoose.connect(MOV_EXP_DB, {
 //   'http://localhost:3000',
 // ];
 
-// app.use(cors());
+app.use(cors());
 
 // app.use((req, res, next) => {
 //   const { origin } = req.headers;
