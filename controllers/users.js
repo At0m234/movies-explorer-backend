@@ -22,10 +22,10 @@ console.log(req.body);
       name: req.body.name,
       email: req.body.email,
     },
-    // {
-    //   new: true, // обработчик then получит на вход обновлённую запись
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
     //   runValidators: true, // данные будут валидированы перед изменением
-    // },
+    },
   )
     .then((data) => {
       if (!data) {
