@@ -13,20 +13,22 @@ router.get('/', getOwnMovies);
 // country, director, duration, year,
 // description, image, trailer, nameRU, nameEN и thumbnail
 // POST /movies
-router.post('/', celebrate({
-  body: Joi.object().keys({
-    country: Joi.string().required(),
-    director: Joi.string().required(),
-    duration: Joi.number().required(),
-    year: Joi.string().required(),
-    description: Joi.string().required(),
-    image: Joi.object().required(),
-    trailerLink: Joi.string().required().pattern(new RegExp(urlRegExp)),
-    movieId: Joi.number().required(),
-    nameRU: Joi.string().required(),
-    nameEN: Joi.string().required(),
-  }).unknown(true),
-}), createMovie);
+// router.post('/', celebrate({
+//   body: Joi.object().keys({
+//     country: Joi.string().required(),
+//     director: Joi.string().required(),
+//     duration: Joi.number().required(),
+//     year: Joi.string().required(),
+//     description: Joi.string().required(),
+//     image: Joi.object().required(),
+//     trailerLink: Joi.string().required().pattern(new RegExp(urlRegExp)),
+//     movieId: Joi.number().required(),
+//     nameRU: Joi.string().required(),
+//     nameEN: Joi.string().required(),
+//   }).unknown(true),
+// }), createMovie);
+
+router.post('/', createMovie);
 
 // удаляет сохранённый фильм по _id
 // DELETE /movies/:movieId
