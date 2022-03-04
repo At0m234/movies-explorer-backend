@@ -2,18 +2,14 @@ const jwt = require('jsonwebtoken');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
-const {
-  idExistsError,
-  searchFilmError,
-  invalidMovieId,
-} = require('../utils/constants');
-
+const { idExistsError, searchFilmError, invalidMovieId } = require('../utils/constants');
 const Movie = require('../models/movie');
 
 // создаёт фильм с переданными в теле
 // country, director, duration, year,
 // description, image, trailer, nameRU, nameEN и thumbnail
 // POST /movies
+
 const createMovie = (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization.replace('Bearer ', '');
