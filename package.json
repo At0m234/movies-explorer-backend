@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "Backend on project work 'movies-explorer'",
+  "description": "Graduate work. Movies-Explorer application Backend",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

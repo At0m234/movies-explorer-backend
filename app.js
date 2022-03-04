@@ -19,8 +19,8 @@ const CentralizedErrorHandler = require('./middlewares/centralized-error-handler
 const { serverIsFalling, requestedResourceWasNotFound } = require('./utils/constants');
 // импортируем роутеры пользователей и фильмов
 const { usersRoutes, moviesRoutes } = require('./routes/index');
-// Слушаем 3000 порт
-const { PORT = 3000 } = process.env;
+// Слушаем 4000 порт
+const { PORT = 4000 } = process.env;
 const { MOV_EXP_DB = 'mongodb://localhost:27017/moviesExplorerDB' } = process.env;
 
 const app = express();
@@ -46,7 +46,7 @@ mongoose.connect(MOV_EXP_DB, {
 //   'https://api.movexp.students.nomoredomains.icu',
 //   'http://movexp.students.nomoredomains.icu',
 //   'https://movexp.students.nomoredomains.icu',
-//   'http://localhost:3000',
+//   'http://localhost:4000',
 // ];
 
 app.use(cors());
@@ -87,11 +87,11 @@ app.post('/signin', celebrate({
 }), login);
 
 // подключаем краш-тест сервера
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error(serverIsFalling);
-  }, 0);
-});
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error(serverIsFalling);
+//   }, 0);
+// });
 
 // подключаем роуты, требующие авторизации
 app.use('/users', auth, usersRoutes);
